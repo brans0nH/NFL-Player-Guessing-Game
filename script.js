@@ -89,14 +89,21 @@ document.addEventListener('DOMContentLoaded', () => {
         if (selectedTeam === correctTeam) {
             score++;
             scoreEl.textContent = score;
-            resultIndicatorEl.textContent = '✅';
+            showResultIndicator('✅');
         } else {
-            resultIndicatorEl.textContent = '❌';
+            showResultIndicator('❌');
         }
         playerIndex++;
         setTimeout(() => {
-            resultIndicatorEl.textContent = '';
             displayPlayer();
+        }, 1000);
+    }
+
+    function showResultIndicator(indicator) {
+        resultIndicatorEl.textContent = indicator;
+        resultIndicatorEl.style.display = 'block';
+        setTimeout(() => {
+            resultIndicatorEl.style.display = 'none';
         }, 1000);
     }
 
