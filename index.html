@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NFL Player Guessing Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>NFL Player Team Guessing Game</h1>
+    <div id="game-container">
+        <p>Guess the team for this player:</p>
+        <h2 id="player-name"></h2>
+        <div id="team-buttons" class="teams-grid"></div>
+        <div id="result-indicator"></div>
+        <p>Score: <span id="score">0</span></p>
+    </div>
+    <div id="results-container" style="display: none;">
+        <h2>Game Over!</h2>
+        <p>Your final score is: <span id="final-score"></span></p>
+        <button id="play-again">Play Again</button>
+    </div>
+    <script src="teams.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
