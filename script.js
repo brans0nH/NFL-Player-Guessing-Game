@@ -28,9 +28,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function setupGame() {
         console.log("Running setupGame()");
-        const response = await fetch('players.json');
-        players = await response.json();
+        const response = await fetch('players.csv');
+        const csvData = await response.text();
+        players = parseCSV(csvData);
         startGame();
+    }
+
+    function parseCSV(data) {
+        const lines = data.trim().split('\n');
+        const headers = lines[0].split(',');
+        return lines.slice(1).map(line => {
+            const values = line.split(',');
+            return headers.reduce((obj, header, index) => {
+                obj[header.trim()] = values[index].trim();
+                return obj;
+            }, {});
+        });
     }
 
     function startGame() {
@@ -54,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Running displayPlayer()");
         if (playerIndex < currentPlayers.length) {
             const player = currentPlayers[playerIndex];
-            playerNameEl.textContent = player.name;
+            playerNameEl.textContent = player.Player;
             createTeamButtons();
         } else {
             endGame();
@@ -85,26 +98,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkAnswer(selectedTeam) {
         console.log("Running checkAnswer()");
-        const correctTeam = currentPlayers[playerIndex].team;
+        const correctTeamAbbr = currentPlayers[playerIndex].Team;
+        const correctTeam = teamAbbreviations[correctTeamAbbr];
+        let delay = 1000; // Default delay for correct answers
+
         if (selectedTeam === correctTeam) {
             score++;
             scoreEl.textContent = score;
-            showResultIndicator('✅');
+            showResultIndicator('✅', delay);
         } else {
-            showResultIndicator('❌');
+            delay = 2500; // Longer delay for incorrect answers
+            showResultIndicator(`❌<br>Correct Answer: ${correctTeam}`, delay);
         }
+
         playerIndex++;
         setTimeout(() => {
             displayPlayer();
-        }, 1000);
+        }, delay);
     }
 
-    function showResultIndicator(indicator) {
-        resultIndicatorEl.textContent = indicator;
+    function showResultIndicator(indicator, duration) {
+        resultIndicatorEl.innerHTML = indicator;
         resultIndicatorEl.style.display = 'block';
         setTimeout(() => {
             resultIndicatorEl.style.display = 'none';
-        }, 1000);
+        }, duration);
     }
 
     function endGame() {
