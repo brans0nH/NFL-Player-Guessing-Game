@@ -28,22 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function setupGame() {
         console.log("Running setupGame()");
-        const response = await fetch('players.csv');
-        const csvData = await response.text();
-        players = parseCSV(csvData);
+        const response = await fetch('players.json');
+        players = await response.json();
         startGame();
-    }
-
-    function parseCSV(data) {
-        const lines = data.trim().split('\n');
-        const headers = lines[0].split(',');
-        return lines.slice(1).map(line => {
-            const values = line.split(',');
-            return headers.reduce((obj, header, index) => {
-                obj[header.trim()] = values[index].trim();
-                return obj;
-            }, {});
-        });
     }
 
     function startGame() {
@@ -67,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("Running displayPlayer()");
         if (playerIndex < currentPlayers.length) {
             const player = currentPlayers[playerIndex];
-            playerNameEl.textContent = player.Player;
+            playerNameEl.textContent = player.name;
             createTeamButtons();
         } else {
             endGame();
@@ -98,31 +85,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkAnswer(selectedTeam) {
         console.log("Running checkAnswer()");
-        const correctTeamAbbr = currentPlayers[playerIndex].Team;
-        const correctTeam = teamAbbreviations[correctTeamAbbr];
-        let delay = 1000; // Default delay for correct answers
-
+        const correctTeam = currentPlayers[playerIndex].team;
         if (selectedTeam === correctTeam) {
             score++;
             scoreEl.textContent = score;
-            showResultIndicator('✅', delay);
+            showResultIndicator('✅');
         } else {
-            delay = 2500; // Longer delay for incorrect answers
-            showResultIndicator(`❌<br>Correct Answer: ${correctTeam}`, delay);
+            showResultIndicator('❌');
         }
-
         playerIndex++;
         setTimeout(() => {
             displayPlayer();
-        }, delay);
+        }, 1000);
     }
 
-    function showResultIndicator(indicator, duration) {
-        resultIndicatorEl.innerHTML = indicator;
+    function showResultIndicator(indicator) {
+        resultIndicatorEl.textContent = indicator;
         resultIndicatorEl.style.display = 'block';
         setTimeout(() => {
             resultIndicatorEl.style.display = 'none';
-        }, duration);
+        }, 1000);
     }
 
     function endGame() {

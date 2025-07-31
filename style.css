@@ -58,14 +58,13 @@ h1 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 50px;
+    font-size: 100px;
     padding: 20px;
     border-radius: 10px;
     background-color: rgba(0, 0, 0, 0.7);
     color: white;
     z-index: 1000;
     display: none; /* Initially hidden */
-    text-align: center;
 }
 
 #results-container {
